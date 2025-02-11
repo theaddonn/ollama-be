@@ -1,0 +1,157 @@
+{
+  "author": "theaddonn <theaddonn@gmail.com>",
+  "name": "OllamaBE",
+  "packs": {
+    "behaviorPack": "./packs/BP"
+  },
+  "regolith": {
+    "dataPath": "./packs/data",
+    "filterDefinitions": {
+      "gametests": {
+        "url": "github.com/Bedrock-OSS/regolith-filters",
+        "version": "1.6.1"
+      },
+      "json_cleaner": {
+        "url": "github.com/Bedrock-OSS/regolith-filters",
+        "version": "1.1.1"
+      },
+      "packer": {
+        "url": "github.com/MCDevKit/regolith-library",
+        "version": "1.0.3"
+      }
+    },
+    "profiles": {
+      "build": {
+        "export": {
+          "readOnly": false,
+          "target": "local"
+        },
+        "filters": [
+          {
+            "filter": "json_cleaner"
+          },
+          {
+            "profile": "build-dev"
+          },
+          {
+            "profile": "build-release"
+          }
+        ]
+      },
+      "build-dev": {
+        "export": {
+          "readOnly": false,
+          "target": "local"
+        },
+        "filters": [
+          {
+            "profile": "script-dev"
+          },
+          {
+            "filter": "packer",
+            "settings": {
+              "output": "OllamaBE-dev.mcaddon"
+            }
+          }
+        ]
+      },
+      "build-release": {
+        "export": {
+          "readOnly": false,
+          "target": "local"
+        },
+        "filters": [
+          {
+            "profile": "script-release"
+          },
+          {
+            "filter": "packer",
+            "settings": {
+              "output": "OllamaBE.mcaddon"
+            }
+          }
+        ]
+      },
+      "default": {
+        "export": {
+          "readOnly": false,
+          "target": "development"
+        },
+        "filters": [
+          {
+            "filter": "json_cleaner"
+          },
+          {
+            "profile": "script-dev"
+          }
+        ]
+      },
+      "release": {
+        "export": {
+          "readOnly": false,
+          "target": "development"
+        },
+        "filters": [
+          {
+            "filter": "json_cleaner"
+          },
+          {
+            "profile": "script-release"
+          }
+        ]
+      },
+      "script-dev": {
+        "export": {
+          "readOnly": false,
+          "target": "local"
+        },
+        "filters": [
+          {
+            "filter": "gametests",
+            "settings": {
+              "buildOptions": {
+                "bundle": true,
+                "dropLabels": ["QA"],
+                "entryPoints": ["data/gametests/src/main.ts"],
+                "format": "esm",
+                "minify": false,
+                "target": "es2020"
+              },
+              "debug_build": true,
+              "modules": [
+                "@minecraft/server@2.0.0-beta",
+                "@minecraft/server-net@1.0.0-beta"
+              ]
+            }
+          }
+        ]
+      },
+      "script-release": {
+        "export": {
+          "readOnly": false,
+          "target": "local"
+        },
+        "filters": [
+          {
+            "filter": "gametests",
+            "settings": {
+              "buildOptions": {
+                "bundle": true,
+                "dropLabels": ["LOGGING", "DEBUG"],
+                "entryPoints": ["data/gametests/src/main.ts"],
+                "format": "esm",
+                "minify": true,
+                "outfile": "BP/scripts/ollamabe/main.js",
+                "target": "es2020"
+              },
+              "modules": [
+                "@minecraft/server@2.0.0-beta",
+                "@minecraft/server-net@1.0.0-beta"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

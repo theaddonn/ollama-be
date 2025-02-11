@@ -1,0 +1,22 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "pack.name",
+    "description": "pack.description",
+    "uuid": "550162f4-5db1-4338-a675-b9a50eee62be",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 20]
+  },
+  "metadata": {
+    "authors": ["theaddonn <theaddonn@gmail.com>"]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "description": "pack.modules.behaviors.description",
+      "uuid": "444205f7-13b2-4790-8e33-633a851ce248",
+      "version": [1, 0, 0]
+    }
+  ],
+  "dependencies": []
+}

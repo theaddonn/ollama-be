@@ -1,0 +1,23 @@
+{
+  "name": "ollama-be",
+  "version": "0.1.0",
+  "description": "OllamaBE",
+  "main": "main.js",
+  "scripts": {},
+  "author": "theaddonn <theaddonn@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@bedrock-oss/bedrock-boost": "^1.0.2",
+    "@minecraft/server": "beta",
+    "@minecraft/server-net": "beta",
+    "core-js": "^3.40.0",
+    "ollama": "^0.5.12"
+  },
+  "devDependencies": {
+    "@types/web": "^0.0.201",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-minecraft-linting": "^1.1.0"
+  }
+}
