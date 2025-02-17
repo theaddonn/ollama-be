@@ -9,10 +9,10 @@
   "dependencies": {
     "@bedrock-oss/bedrock-boost": "^1.0.2",
     "@minecraft/server": "beta",
-    "@minecraft/server-ui": "beta",
     "@minecraft/server-net": "beta",
-    "abort-controller": "^3.0.0",
+    "@minecraft/server-ui": "beta",
     "core-js": "^3.40.0",
+    "math-expression-evaluator": "^2.0.6",
     "ollama": "^0.5.12"
   },
   "devDependencies": {
