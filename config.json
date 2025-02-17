@@ -115,7 +115,9 @@
                 "entryPoints": ["data/gametests/src/main.ts"],
                 "format": "esm",
                 "minify": false,
-                "target": "es2020"
+                "target": "es2020",
+                "debugBuild": true,
+                "injectSourceMapping": true
               },
               "debug_build": true,
               "modules": [
