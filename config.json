@@ -120,6 +120,7 @@
               "debug_build": true,
               "modules": [
                 "@minecraft/server@2.0.0-beta",
+                "@minecraft/server-ui@2.0.0-beta",
                 "@minecraft/server-net@1.0.0-beta"
               ]
             }
@@ -146,6 +147,7 @@
               },
               "modules": [
                 "@minecraft/server@2.0.0-beta",
+                "@minecraft/server-ui@2.0.0-beta",
                 "@minecraft/server-net@1.0.0-beta"
               ]
             }

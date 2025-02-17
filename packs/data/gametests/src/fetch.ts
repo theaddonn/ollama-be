@@ -13,7 +13,7 @@ export const fetch = async (
 function addInitBody(request: minecraftnet.HttpRequest, init: RequestInit) {
   if (typeof init.body === 'string') {
     request.body = init.body;
-  } else if (!(init.body === undefined && init.body === null)) {
+  } else if (init.body !== undefined && init.body !== null) {
     throw new Error(`Unknown init body type ${init.body}`);
   }
 }
@@ -55,6 +55,8 @@ function addInitData(request: minecraftnet.HttpRequest, init?: RequestInit) {
   addInitBody(request, init);
   addInitHeaders(request, init);
   addInitMethod(request, init);
+
+  request.timeout = 0.25;
 }
 
 function requestFetch2MC(
