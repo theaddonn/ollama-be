@@ -22,9 +22,15 @@ function addInitHeaders(request: minecraftnet.HttpRequest, init: RequestInit) {
   if (init.headers !== undefined) {
     request.headers = [];
 
-    init.headers.forEach((key: string, value: string) => {
-      request.headers.push(new minecraftnet.HttpHeader(key, value));
-    });
+    if (init.headers instanceof Headers) {
+      init.headers.forEach((value: string, key: string) => {
+        request.headers.push(new minecraftnet.HttpHeader(key, value));
+      });
+    } else {
+      Object.entries(init.headers).forEach(([key, value]) => {
+        request.headers.push(new minecraftnet.HttpHeader(key, value));
+      });
+    }
   }
 }
 
