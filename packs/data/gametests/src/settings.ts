@@ -1,31 +1,54 @@
-import { Player } from '@minecraft/server';
+import { Player, world } from '@minecraft/server';
 import { ModalFormData } from '@minecraft/server-ui';
 import { Options } from 'ollama/dist/browser.cjs';
 
+export const OllamaDefaultHost = 'http://localhost:11434/';
+
 export class SessionSettings {
   host: string | undefined;
+  functions: boolean = true;
   model: {
     available: string[];
     current: string | undefined;
   } = {
-    available: ['Hello', 'not'],
-    current: 'not',
+    available: [],
+    current: undefined,
   };
   options: Partial<Options> = {};
 
   public async edit(player: Player) {
-    const form = new ModalFormData();
+    const form = new ModalFormData().title('OllamaBE Settings');
 
     form.label(
-      "Edit the Ollama model settings below. These settings allow you to customize the behavior and performance of the model. Adjust the parameters to fine-tune the models' responses, control randomness, and manage repetition. Please review each option carefully and make the necessary changes to suit your needs.",
+      "Customize the settings for the Ollama model provided below. These options let you adjust the models' behavior and performance by fine-tuning its responses, controlling randomness, and managing repetition.",
     );
+    form.label(
+      'Please review each option carefully and modify them as needed to meet your requirements.',
+    );
+    form.divider();
 
+    form.label(
+      'Select the Ollama model you want to use from the available options below.',
+    );
     form.dropdown(
-      'Set the current ollama model used',
+      'model',
       this.model.available,
       this.model.current
         ? this.model.available.indexOf(this.model.current)
         : undefined,
+    );
+    form.divider();
+
+    form.label(
+      'Specify the host URL for the Ollama model. This is where the model will be accessed from.',
+    );
+    form.textField('host', OllamaDefaultHost, this.host);
+    form.divider();
+
+    form.label('functions');
+    form.toggle(
+      'Enable or disable Ollama tools. Turning this on will allow the mode to run and interact with your world. Note: Not all models support this feature.',
+      this.functions,
     );
     form.divider();
 
@@ -79,21 +102,31 @@ export class SessionSettings {
 
     const [
       model,
+      host,
+      functions,
       temperature,
       seed,
       num_predict,
       repeat_penalty,
       repeat_last_n,
-    ] = response.formValues as (string | undefined)[];
+    ] = response.formValues as (string | number | boolean | undefined)[];
 
-    if (model !== undefined) this.model.current = model as string;
+    if (model !== undefined && typeof model === 'number') {
+      this.model.current = this.model.available[model];
+    }
+    if (host !== undefined && typeof host === 'string' && host.trim() !== '') {
+      this.host = host;
+    }
+    if (functions !== undefined && typeof functions === 'boolean') {
+      this.functions = functions;
+    }
 
-    const parseAndSetOption = (
-      value: string | undefined,
+    const parseAndSetOptionFromString = (
+      value: string | number | boolean | undefined,
       parser: (val: string) => number,
       optionKey: keyof Partial<Options>,
     ) => {
-      if (value !== undefined) {
+      if (value !== undefined && typeof value === 'string') {
         const parsedValue = parser(value);
         if (!isNaN(parsedValue)) {
           (this.options[optionKey] as number | undefined) = parsedValue;
@@ -103,10 +136,10 @@ export class SessionSettings {
       }
     };
 
-    parseAndSetOption(temperature, parseFloat, 'temperature');
-    parseAndSetOption(seed, parseInt, 'seed');
-    parseAndSetOption(num_predict, parseInt, 'num_predict');
-    parseAndSetOption(repeat_penalty, parseFloat, 'repeat_penalty');
-    parseAndSetOption(repeat_last_n, parseInt, 'repeat_last_n');
+    parseAndSetOptionFromString(temperature, parseFloat, 'temperature');
+    parseAndSetOptionFromString(seed, parseInt, 'seed');
+    parseAndSetOptionFromString(num_predict, parseInt, 'num_predict');
+    parseAndSetOptionFromString(repeat_penalty, parseFloat, 'repeat_penalty');
+    parseAndSetOptionFromString(repeat_last_n, parseInt, 'repeat_last_n');
   }
 }

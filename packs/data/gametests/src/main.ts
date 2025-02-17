@@ -10,91 +10,33 @@ import { Session } from './session';
 
 const session = new Session();
 
-const OllamaScriptEventNamespace = 'ollama:';
-
 system.afterEvents.scriptEventReceive.subscribe(async (event) => {
-  console.log(session.doctor());
+  if (
+    event.sourceEntity === undefined ||
+    !event.sourceEntity.matches({ type: 'minecraft:player' })
+  )
+    return;
 
-  session.edit(event.sourceEntity as Player);
+  const player = event.sourceEntity as Player;
 
-  //   switch (event.id) {
-  //     case OllamaScriptEventNamespace + 'settings':
-  //     case OllamaScriptEventNamespace + 'chat':
-  //       {
-  //         const chat = await ollama.chat({
-  //           model: 'llama3.1:latest',
-  //           messages: [{ role: 'user', content: event.message }],
-  //           options: { num_predict: 100 },
-  //         });
-
-  //         console.log(`AI: ${chat.message.content}`);
-  //       }
-  //       break;
-  //     case OllamaScriptEventNamespace + 'doctor':
-  //       break;
-  //     case OllamaScriptEventNamespace + 'list':
-  //       {
-  //         const list = await ollama.list();
-  //         const models = list.models
-  //           .map((model: ModelResponse) => {
-  //             return `- ${model.name}`;
-  //           })
-  //           .join('\n');
-
-  //         console.log(`Available Models: \n${models}`);
-  //       }
-  //       break;
-  //   }
+  switch (event.id) {
+    case 'ollama:edit':
+    case 'ollama:settings':
+      {
+        const healthy = await session.doctor(player);
+        if (healthy) {
+          await session.updateModels();
+          await session.edit(player);
+        }
+      }
+      break;
+    case 'ollama:chat':
+      {
+        const healthy = await session.doctor(player);
+        if (healthy) {
+          await session.chat(event.message, player);
+        }
+      }
+      break;
+  }
 });
-
-// world.afterEvents.chatSend.subscribe(async (event) => {
-//   const player = event.sender;
-
-//   addChatMessage(player, { content: event.message, role: 'user' });
-
-//   const chat = await ollama.chat({
-//     model: 'llama2-uncensored:latest',
-//     messages: getChatMessages(player),
-//     options: { num_predict: 100 },
-//   });
-
-//   addChatMessage(player, { content: chat.message.content, role: 'assistant' });
-//   event.sender.sendMessage(`<AI> ${chat.message.content}`);
-// });
-
-// function addChatMessage(
-//   player: Player,
-//   message: { content: string; role: string },
-// ) {
-//   let messages = getChatMessages(player);
-
-//   if (messages === undefined) {
-//     messages = [];
-//   }
-
-//   messages.push(message);
-
-//   setChatMessages(player, messages);
-// }
-
-// function getChatMessages(
-//   player: Player,
-// ): { content: string; role: string }[] | undefined {
-//   const dynamicProperty = player.getDynamicProperty('ollama:chat') as
-//     | string
-//     | undefined;
-
-//   if (dynamicProperty === undefined) return undefined;
-
-//   const messages: { content: string; role: string }[] =
-//     JSON.parse(dynamicProperty);
-
-//   return messages;
-// }
-
-// function setChatMessages(
-//   player: Player,
-//   messages: { content: string; role: string }[],
-// ) {
-//   player.setDynamicProperty('ollama:chat', JSON.stringify(messages));
-// }
