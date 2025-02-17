@@ -9,7 +9,7 @@
     "filterDefinitions": {
       "gametests": {
         "url": "github.com/Bedrock-OSS/regolith-filters",
-        "version": "1.6.1"
+        "version": "1.7.1"
       },
       "json_cleaner": {
         "url": "github.com/Bedrock-OSS/regolith-filters",
@@ -115,11 +115,10 @@
                 "entryPoints": ["data/gametests/src/main.ts"],
                 "format": "esm",
                 "minify": false,
-                "target": "es2020",
-                "debugBuild": true,
-                "injectSourceMapping": true
+                "target": "es2020"
               },
-              "debug_build": true,
+              "debugBuild": true,
+              "injectSourceMapping": true,
               "modules": [
                 "@minecraft/server@2.0.0-beta",
                 "@minecraft/server-ui@2.0.0-beta",
