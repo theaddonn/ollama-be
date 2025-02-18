@@ -16,7 +16,7 @@ export class SessionSettings {
   };
   options: Partial<Options> = {};
 
-  public async edit(player: Player) {
+  public async edit(player: Player, healthy: boolean) {
     const form = new ModalFormData().title('OllamaBE Settings');
 
     form.label(
@@ -28,21 +28,25 @@ export class SessionSettings {
     form.divider();
 
     form.label(
-      'Select the Ollama model you want to use from the available options below.',
-    );
-    form.dropdown(
-      'model',
-      this.model.available,
-      this.model.current
-        ? this.model.available.indexOf(this.model.current)
-        : undefined,
-    );
-    form.divider();
-
-    form.label(
       'Specify the host URL for the Ollama model. This is where the model will be accessed from.',
     );
     form.textField('host', OllamaDefaultHost, this.host);
+    form.divider();
+
+    form.label(
+      'Select the Ollama model you want to use from the available options below.',
+    );
+    if (healthy) {
+      form.dropdown(
+        'model',
+        this.model.available,
+        this.model.current
+          ? this.model.available.indexOf(this.model.current)
+          : undefined,
+      );
+    } else {
+      form.label('Failed to retrieve models.');
+    }
     form.divider();
 
     form.label('functions');
@@ -100,23 +104,29 @@ export class SessionSettings {
 
     if (response.formValues === undefined) return;
 
-    const [
-      model,
-      host,
-      functions,
-      temperature,
-      seed,
-      num_predict,
-      repeat_penalty,
-      repeat_last_n,
-    ] = response.formValues as (string | number | boolean | undefined)[];
+    const formValues = response.formValues;
+    let index = 0;
 
-    if (model !== undefined && typeof model === 'number') {
-      this.model.current = this.model.available[model];
+    const host = formValues[index++];
+
+    if (healthy) {
+      const model = formValues[index++];
+      if (model !== undefined && typeof model === 'number') {
+        this.model.current = this.model.available[model];
+      }
     }
+
+    const functions = formValues[index++];
+    const temperature = formValues[index++];
+    const seed = formValues[index++];
+    const num_predict = formValues[index++];
+    const repeat_penalty = formValues[index++];
+    const repeat_last_n = formValues[index++];
+
     if (host !== undefined && typeof host === 'string' && host.trim() !== '') {
       this.host = host;
     }
+
     if (functions !== undefined && typeof functions === 'boolean') {
       this.functions = functions;
     }

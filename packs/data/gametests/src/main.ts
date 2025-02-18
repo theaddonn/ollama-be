@@ -10,6 +10,14 @@ import { Session } from './session';
 
 const session = new Session();
 
+system.beforeEvents.startup.subscribe((_) => {
+  session.load();
+});
+
+system.beforeEvents.shutdown.subscribe((_) => {
+  session.save();
+});
+
 system.afterEvents.scriptEventReceive.subscribe(async (event) => {
   if (
     event.sourceEntity === undefined ||
@@ -26,8 +34,8 @@ system.afterEvents.scriptEventReceive.subscribe(async (event) => {
         const healthy = await session.doctor(player);
         if (healthy) {
           await session.updateModels();
-          await session.edit(player);
         }
+        await session.edit(player, healthy);
       }
       break;
     case 'ollama:chat':
@@ -39,4 +47,6 @@ system.afterEvents.scriptEventReceive.subscribe(async (event) => {
       }
       break;
   }
+
+  session.save();
 });
