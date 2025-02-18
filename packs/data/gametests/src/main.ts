@@ -51,9 +51,9 @@ system.afterEvents.scriptEventReceive.subscribe(async (event) => {
       {
         const form = new MessageFormData()
           .title('OllamaBE Clear')
-          .body('Are you sure you want to clear your message history?')
-          .button1('Clear')
-          .button2('Cancel');
+          .body('Do you really want to clear your message history?')
+          .button1('Yes, clear it')
+          .button2('No, keep it');
 
         const response = await form.show(player);
 
