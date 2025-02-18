@@ -8,6 +8,7 @@ import { SessionSettings, OllamaDefaultHost } from './settings';
 import { fetch } from './fetch';
 import { EvalFn } from './tools/eval';
 import { ToolManager } from './tool';
+import { GetTimeOfDayFn, SetTimeOfDayFn } from './tools/time';
 
 type Message = {
   role: string;
@@ -39,8 +40,9 @@ const SystemMessage: Message = {
   content: SystemPrompt,
 };
 const SystemToolManager: ToolManager = new ToolManager()
-  .registerTool(EvalFn.id, EvalFn.description, new EvalFn())
-  .registerTool(EvalFn.id, EvalFn.description, new EvalFn());
+  .registerTool(EvalFn.id, EvalFn.desc, new EvalFn())
+  .registerTool(SetTimeOfDayFn.id, SetTimeOfDayFn.desc, new SetTimeOfDayFn())
+  .registerTool(GetTimeOfDayFn.id, GetTimeOfDayFn.desc, new GetTimeOfDayFn());
 
 const SessionWorldStorageID = 'ollama:storage';
 
@@ -126,15 +128,19 @@ export class Session {
     while (tool_calls !== undefined && tool_calls.length > 0) {
       for (const tool_call of tool_calls) {
         const name = tool_call.function.name;
+        const args = tool_call.function.arguments;
+
+        player.sendMessage(
+          `<Ollama Tool> ${name}: ${JSON.stringify(args, null, 2)}`,
+        );
 
         try {
-          const result = await SystemToolManager.callTool(
-            name,
-            tool_call.function.arguments,
-          );
+          const result = await SystemToolManager.callTool(name, args);
           this.messages.push({ role: 'tool', content: `${name}: ${result}` });
+          player.sendMessage(`<Ollama Tool> ${name} => §a${result}§r`);
         } catch (e) {
           this.messages.push({ role: 'tool', content: `${name}: ${e}` });
+          player.sendMessage(`<Ollama Tool> ${name} => §c${e}§r`);
         }
       }
 
