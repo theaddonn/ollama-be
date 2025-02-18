@@ -3,10 +3,10 @@ import Mexp from 'math-expression-evaluator';
 
 export class EvalFn implements ToolFn {
   static readonly id: string = 'eval';
-  static readonly description: string =
+  static readonly desc: string =
     'Evaluates a mathematical expression and returns the result as a string.';
 
-  required: string[] = [];
+  required: string[] = ['expression'];
   properties: {
     [key: string]: { type: string; description: string; enum?: string[] };
   } = {
