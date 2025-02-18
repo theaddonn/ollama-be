@@ -46,7 +46,11 @@ system.afterEvents.scriptEventReceive.subscribe(async (event) => {
         }
       }
       break;
-  }
+    case 'ollama:clear':
+      {
+        session.clear();
+      }
+      break;
 
   session.save();
 });

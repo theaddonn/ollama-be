@@ -190,4 +190,8 @@ export class Session {
 
     world.setDynamicProperty(SessionWorldStorageID, JSON.stringify(data));
   }
+
+  public clear() {
+    this.messages = [];
+  }
 }
