@@ -13,7 +13,7 @@ export class SetTimeOfDayFn implements ToolFn {
     time: {
       type: 'integer',
       description:
-        'Specifies the time of day in ticks to set in the Minecraft world (0 for beginning of day to 24000 for end of night)',
+        'The time of day in ticks (between 0 for beginning of day and 24000 for end of night)',
     },
   };
 
