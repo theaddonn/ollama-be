@@ -1,4 +1,4 @@
-import { Player } from '@minecraft/server';
+import { Player, world } from '@minecraft/server';
 import {
   Ollama,
   Message as OllamaMessage,
@@ -97,14 +97,14 @@ export class Session {
     this.settings.model.available = list;
   }
 
-  public async edit(player: Player) {
-    await this.settings.edit(player);
+  public async edit(player: Player, healthy: boolean) {
+    await this.settings.edit(player, healthy);
   }
 
   public async chat(message: string, player: Player): Promise<boolean> {
     const model = this.settings.model.current;
 
-    if (model == undefined) {
+    if (!model) {
       player.sendMessage(
         `§cNo model selected. Please set a model using /scriptevent ollama:settings.`,
       );
@@ -112,12 +112,15 @@ export class Session {
     }
 
     this.messages.push({ content: message, role: 'user', name: player.name });
+    let functions = this.settings.functions
+      ? SystemToolManager.definitions()
+      : undefined;
 
     let response = await this.ollama.chat({
-      model: model,
-      messages: this.convertMessages([SystemMessage].concat(this.messages)),
+      model,
+      messages: this.convertMessages([SystemMessage, ...this.messages]),
       stream: false,
-      tools: SystemToolManager.definitions(),
+      tools: functions,
       options: this.settings.options,
     });
 
@@ -125,30 +128,36 @@ export class Session {
 
     let tool_calls = response.message.tool_calls;
 
-    while (tool_calls !== undefined && tool_calls.length > 0) {
+    while (tool_calls && tool_calls.length > 0) {
       for (const tool_call of tool_calls) {
-        const name = tool_call.function.name;
-        const args = tool_call.function.arguments;
-
-        player.sendMessage(
-          `<Ollama Tool> ${name}: ${JSON.stringify(args, null, 2)}`,
-        );
+        const { name, arguments: args } = tool_call.function;
 
         try {
           const result = await SystemToolManager.callTool(name, args);
           this.messages.push({ role: 'tool', content: `${name}: ${result}` });
-          player.sendMessage(`<Ollama Tool> ${name} => §a${result}§r`);
+          player.sendMessage(
+            `<Ollama Tool> ${name}(${JSON.stringify(
+              args,
+              null,
+              2,
+            )}) => §a${result}§r`,
+          );
         } catch (e) {
           this.messages.push({ role: 'tool', content: `${name}: ${e}` });
-          player.sendMessage(`<Ollama Tool> ${name} => §c${e}§r`);
+          player.sendMessage(
+            `<Ollama Tool> ${name}(${JSON.stringify(
+              args,
+              null,
+              2,
+            )}) => §c${e}§r`,
+          );
         }
       }
-
       response = await this.ollama.chat({
-        model: model,
-        messages: this.convertMessages([SystemMessage].concat(this.messages)),
+        model,
+        messages: this.convertMessages([SystemMessage, ...this.messages]),
         stream: false,
-        tools: SystemToolManager.definitions(),
+        tools: functions,
         options: this.settings.options,
       });
       tool_calls = response.message.tool_calls;
@@ -157,5 +166,28 @@ export class Session {
     player.sendMessage(`<OllamaBE> ${response.message.content}`);
 
     return true;
+  }
+
+  public load() {
+    const property = world.getDynamicProperty(SessionWorldStorageID);
+
+    if (typeof property !== 'string') return;
+
+    const data = JSON.parse(property);
+
+    const messages = data['messages'] as Message[] | undefined;
+    if (messages !== undefined) this.messages = messages;
+
+    const settings = data['settings'] as SessionSettings | undefined;
+    if (settings !== undefined) this.settings = settings;
+  }
+
+  public save() {
+    const data = {
+      messages: this.messages,
+      settings: this.settings,
+    };
+
+    world.setDynamicProperty(SessionWorldStorageID, JSON.stringify(data));
   }
 }
