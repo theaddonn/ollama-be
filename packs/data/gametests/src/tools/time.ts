@@ -20,7 +20,7 @@ export class SetTimeOfDayFn implements ToolFn {
   handle(params: { [key: string]: any }): Promise<string> {
     const time = parseInt(params['time'], 10);
 
-    if (isNaN(time)) throw new Error('Invalid or missing property: time');
+    if (isNaN(time)) return Promise.reject('Invalid or missing property: time');
 
     try {
       world.setTimeOfDay(time);
