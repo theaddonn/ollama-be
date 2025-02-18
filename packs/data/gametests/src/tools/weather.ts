@@ -1,4 +1,4 @@
-import { WeatherType, world } from '@minecraft/server';
+import { TicksPerDay, WeatherType, world } from '@minecraft/server';
 import { ToolFn } from '../tool';
 
 export class SetWeatherFn implements ToolFn {
@@ -18,18 +18,20 @@ export class SetWeatherFn implements ToolFn {
     duration: {
       type: 'integer',
       description:
-        'The duration of the weather (in ticks). If no duration is provided, the duration will be set to a random duration between 300 and 900 seconds.',
+        'The duration of the weather (in seconds). If no duration is provided, the duration will be set to a random duration between 300 and 900 seconds.',
     },
   };
 
   handle(params: { [key: string]: any }): Promise<string> {
     const weather_name = params['weather'] as string | undefined;
-    const duration = params['duration'] as string | undefined;
+    const duration = params['duration'] as string | number | undefined;
 
     let durationInt: number | undefined = undefined;
 
-    if (duration !== undefined) {
+    if (typeof duration === 'string') {
       durationInt = parseInt(duration, 10);
+    } else {
+      durationInt = duration;
     }
 
     if (weather_name === undefined)
@@ -52,7 +54,12 @@ export class SetWeatherFn implements ToolFn {
     })();
 
     try {
-      world.getDimension('overworld').setWeather(weather, durationInt);
+      world
+        .getDimension('overworld')
+        .setWeather(
+          weather,
+          durationInt ? durationInt * TicksPerDay : undefined,
+        );
       return Promise.resolve(`Set weather to ${weather_name}`);
     } catch (e) {
       return Promise.reject(`Failed to weather: ${e}`);
