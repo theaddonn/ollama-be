@@ -2,6 +2,7 @@
 import 'core-js/web/url';
 import { Player, system } from '@minecraft/server';
 import { Session } from './session';
+import { MessageFormData } from '@minecraft/server-ui';
 
 // Polyfill.installPlayer();
 // Polyfill.installConsole();
@@ -45,9 +46,20 @@ system.afterEvents.scriptEventReceive.subscribe(async (event) => {
         }
       }
       break;
+    case 'ollama:clean':
     case 'ollama:clear':
       {
-        session.clear();
+        const form = new MessageFormData()
+          .title('OllamaBE Clear')
+          .body('Are you sure you want to clear your message history?')
+          .button1('Clear')
+          .button2('Cancel');
+
+        const response = await form.show(player);
+
+        if (response.selection !== undefined && response.selection == 0) {
+          session.clear();
+        }
       }
       break;
     case 'ollama:doctor':
