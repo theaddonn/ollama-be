@@ -57,6 +57,16 @@ system.afterEvents.scriptEventReceive.subscribe(async (event) => {
         }
       }
       break;
+    case 'ollama:help':
+      {
+        player.sendMessage('Available script events:');
+        player.sendMessage('ollama:settings - §oEdit session settings');
+        player.sendMessage('ollama:chat - §oSend a chat message');
+        player.sendMessage('ollama:clear - §oClear the session data');
+        player.sendMessage('ollama:doctor - §oCheck the health of the system');
+        player.sendMessage('ollama:help - §oDisplay this help message');
+      }
+      break;
   }
 
   session.save();
