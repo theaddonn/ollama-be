@@ -1,6 +1,6 @@
 //import { Logger, Polyfill } from '@bedrock-oss/bedrock-boost';
 import 'core-js/web/url';
-import { Player, system, world } from '@minecraft/server';
+import { Player, system } from '@minecraft/server';
 import { Session } from './session';
 
 // Polyfill.installPlayer();
@@ -9,13 +9,12 @@ import { Session } from './session';
 //const log = Logger.getLogger('OllamaBE');
 
 const session = new Session();
-
-system.beforeEvents.startup.subscribe((_) => {
+system.run(() => {
   session.load();
 });
 
 system.beforeEvents.shutdown.subscribe((_) => {
-  session.save();
+  system.run(session.save);
 });
 
 system.afterEvents.scriptEventReceive.subscribe(async (event) => {

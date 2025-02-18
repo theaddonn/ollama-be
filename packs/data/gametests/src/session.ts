@@ -170,16 +170,22 @@ export class Session {
 
   public load() {
     const property = world.getDynamicProperty(SessionWorldStorageID);
-
     if (typeof property !== 'string') return;
 
     const data = JSON.parse(property);
 
     const messages = data['messages'] as Message[] | undefined;
-    if (messages !== undefined) this.messages = messages;
+    if (messages !== undefined) {
+      this.messages = messages;
+    }
 
     const settings = data['settings'] as SessionSettings | undefined;
-    if (settings !== undefined) this.settings = settings;
+    if (settings !== undefined) {
+      this.settings.functions = settings.functions;
+      this.settings.host = settings.host;
+      this.settings.model = settings.model;
+      this.settings.options = settings.options;
+    }
   }
 
   public save() {
