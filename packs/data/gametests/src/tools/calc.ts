@@ -1,10 +1,10 @@
 import { ToolFn } from '../tool';
 import Mexp from 'math-expression-evaluator';
 
-export class EvalFn implements ToolFn {
-  static readonly id: string = 'eval';
+export class CalcFn implements ToolFn {
+  static readonly id: string = 'calculate';
   static readonly desc: string =
-    'Evaluates a mathematical expression and returns the result as a string.';
+    'Calculates the result of a mathematical expression.';
 
   required: string[] = ['expression'];
   properties: {
@@ -21,10 +21,14 @@ export class EvalFn implements ToolFn {
   handle(params: { [key: string]: any }): Promise<string> {
     const expr = params['expression'] as string | undefined;
 
-    if (expr === undefined) throw Error('Missing property: expression');
+    if (expr === undefined)
+      return Promise.reject('Missing property: expression');
 
-    let result = this.mexp.eval(expr);
-
-    return Promise.resolve(result.toString());
+    try {
+      let result = this.mexp.eval(expr);
+      return Promise.resolve(result.toString());
+    } catch (e) {
+      return Promise.reject(`Error while evaluation: ${e}`);
+    }
   }
 }
