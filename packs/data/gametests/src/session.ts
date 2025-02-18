@@ -6,9 +6,13 @@ import {
 } from 'ollama/dist/browser.cjs';
 import { SessionSettings, OllamaDefaultHost } from './settings';
 import { fetch } from './fetch';
-import { EvalFn } from './tools/eval';
+import { CalcFn } from './tools/calc';
 import { ToolManager } from './tool';
 import { GetTimeOfDayFn, SetTimeOfDayFn } from './tools/time';
+import {
+  GetGamemodeFn as GetGameModeFn,
+  SetGamemodeDayFn as SetGameModeFn,
+} from './tools/gamemode';
 
 type Message = {
   role: string;
@@ -40,9 +44,11 @@ const SystemMessage: Message = {
   content: SystemPrompt,
 };
 const SystemToolManager: ToolManager = new ToolManager()
-  .registerTool(EvalFn.id, EvalFn.desc, new EvalFn())
+  .registerTool(CalcFn.id, CalcFn.desc, new CalcFn())
   .registerTool(SetTimeOfDayFn.id, SetTimeOfDayFn.desc, new SetTimeOfDayFn())
-  .registerTool(GetTimeOfDayFn.id, GetTimeOfDayFn.desc, new GetTimeOfDayFn());
+  .registerTool(GetTimeOfDayFn.id, GetTimeOfDayFn.desc, new GetTimeOfDayFn())
+  .registerTool(SetGameModeFn.id, SetGameModeFn.desc, new SetGameModeFn())
+  .registerTool(GetGameModeFn.id, GetGameModeFn.desc, new GetGameModeFn());
 
 const SessionWorldStorageID = 'ollama:storage';
 
