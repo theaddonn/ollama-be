@@ -13,6 +13,7 @@ import {
   GetGamemodeFn as GetGameModeFn,
   SetGamemodeDayFn as SetGameModeFn,
 } from './tools/gamemode';
+import { GetWeatherFn, SetWeatherFn } from './tools/weather';
 
 type Message = {
   role: string;
@@ -48,7 +49,9 @@ const SystemToolManager: ToolManager = new ToolManager()
   .registerTool(SetTimeOfDayFn.id, SetTimeOfDayFn.desc, new SetTimeOfDayFn())
   .registerTool(GetTimeOfDayFn.id, GetTimeOfDayFn.desc, new GetTimeOfDayFn())
   .registerTool(SetGameModeFn.id, SetGameModeFn.desc, new SetGameModeFn())
-  .registerTool(GetGameModeFn.id, GetGameModeFn.desc, new GetGameModeFn());
+  .registerTool(GetGameModeFn.id, GetGameModeFn.desc, new GetGameModeFn())
+  .registerTool(SetWeatherFn.id, SetWeatherFn.desc, new SetWeatherFn())
+  .registerTool(GetWeatherFn.id, GetWeatherFn.desc, new GetWeatherFn());
 
 const SessionWorldStorageID = 'ollama:storage';
 
