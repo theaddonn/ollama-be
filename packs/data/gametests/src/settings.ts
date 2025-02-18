@@ -1,4 +1,4 @@
-import { Player, world } from '@minecraft/server';
+import { Player } from '@minecraft/server';
 import { ModalFormData } from '@minecraft/server-ui';
 import { Options } from 'ollama/dist/browser.cjs';
 
