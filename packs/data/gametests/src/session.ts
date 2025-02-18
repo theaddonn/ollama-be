@@ -160,6 +160,7 @@ export class Session {
         tools: functions,
         options: this.settings.options,
       });
+      this.messages.push(response.message);
       tool_calls = response.message.tool_calls;
     }
 
