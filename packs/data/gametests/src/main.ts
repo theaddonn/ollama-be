@@ -51,6 +51,14 @@ system.afterEvents.scriptEventReceive.subscribe(async (event) => {
         session.clear();
       }
       break;
+    case 'ollama:doctor':
+      {
+        if (await session.doctor()) {
+          player.sendMessage('§aOllama is operational and in good health!');
+        }
+      }
+      break;
+  }
 
   session.save();
 });
