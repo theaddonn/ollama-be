@@ -1,4 +1,4 @@
-import { world } from '@minecraft/server';
+import { TicksPerDay, world } from '@minecraft/server';
 import { ToolFn } from '../tool';
 
 export class SetTimeOfDayFn implements ToolFn {
@@ -13,7 +13,7 @@ export class SetTimeOfDayFn implements ToolFn {
     time: {
       type: 'integer',
       description:
-        'The time of day in ticks (between 0 for beginning of day and 24000 for end of night)',
+        'The time of day in ticks (between 0 and 24000, 0 = 0AM, 12000 = 12PM, 24000 = 24AM )',
     },
   };
 
@@ -23,7 +23,7 @@ export class SetTimeOfDayFn implements ToolFn {
     if (isNaN(time)) return Promise.reject('Invalid or missing property: time');
 
     try {
-      world.setTimeOfDay(time);
+      world.setTimeOfDay((TicksPerDay + time - TicksPerDay / 4) % TicksPerDay);
       return Promise.resolve(`Set time of day to ${time}`);
     } catch (e) {
       return Promise.reject(`Failed to set time of day: ${e}`);
@@ -43,6 +43,8 @@ export class GetTimeOfDayFn implements ToolFn {
 
   handle(_params: { [key: string]: any }): Promise<string> {
     const time = world.getTimeOfDay();
-    return Promise.resolve(`The time of day is ${time} in ticks`);
+    return Promise.resolve(
+      `The time of day is ${(time + TicksPerDay / 4) % TicksPerDay} in ticks`,
+    );
   }
 }
