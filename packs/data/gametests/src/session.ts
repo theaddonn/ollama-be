@@ -15,6 +15,7 @@ import {
 } from './tools/gamemode';
 import { GetWeatherFn, SetWeatherFn } from './tools/weather';
 import { GetGameRuleFn, SetGameRuleFn } from './tools/gamerules';
+import { GetDifficultyFn, SetDifficultyFn } from './tools/difficulty';
 
 type Message = {
   role: string;
@@ -46,15 +47,17 @@ const SystemMessage: Message = {
   content: SystemPrompt,
 };
 const SystemToolManager: ToolManager = new ToolManager()
-  .registerTool(CalcFn.id, CalcFn.desc, new CalcFn())
-  .registerTool(SetTimeOfDayFn.id, SetTimeOfDayFn.desc, new SetTimeOfDayFn())
-  .registerTool(GetTimeOfDayFn.id, GetTimeOfDayFn.desc, new GetTimeOfDayFn())
-  .registerTool(SetGameModeFn.id, SetGameModeFn.desc, new SetGameModeFn())
-  .registerTool(GetGameModeFn.id, GetGameModeFn.desc, new GetGameModeFn())
-  .registerTool(SetWeatherFn.id, SetWeatherFn.desc, new SetWeatherFn())
-  .registerTool(GetWeatherFn.id, GetWeatherFn.desc, new GetWeatherFn())
-  .registerTool(SetGameRuleFn.id, SetGameRuleFn.desc, new SetGameRuleFn())
-  .registerTool(GetGameRuleFn.id, GetGameRuleFn.desc, new GetGameRuleFn());
+  .register(CalcFn.id, CalcFn.desc, new CalcFn())
+  .register(SetTimeOfDayFn.id, SetTimeOfDayFn.desc, new SetTimeOfDayFn())
+  .register(GetTimeOfDayFn.id, GetTimeOfDayFn.desc, new GetTimeOfDayFn())
+  .register(SetGameModeFn.id, SetGameModeFn.desc, new SetGameModeFn())
+  .register(GetGameModeFn.id, GetGameModeFn.desc, new GetGameModeFn())
+  .register(SetWeatherFn.id, SetWeatherFn.desc, new SetWeatherFn())
+  .register(GetWeatherFn.id, GetWeatherFn.desc, new GetWeatherFn())
+  .register(SetGameRuleFn.id, SetGameRuleFn.desc, new SetGameRuleFn())
+  .register(GetGameRuleFn.id, GetGameRuleFn.desc, new GetGameRuleFn())
+  .register(SetDifficultyFn.id, SetDifficultyFn.desc, new SetDifficultyFn())
+  .register(GetDifficultyFn.id, GetDifficultyFn.desc, new GetDifficultyFn());
 
 const SessionWorldStorageID = 'ollama:storage';
 

@@ -62,7 +62,7 @@ export class SetWeatherFn implements ToolFn {
         );
       return Promise.resolve(`Set weather to ${weather_name}`);
     } catch (e) {
-      return Promise.reject(`Failed to weather: ${e}`);
+      return Promise.reject(`Failed to set weather: ${e}`);
     }
   }
 }

@@ -33,11 +33,7 @@ export class ToolManager {
     });
   }
 
-  public registerTool(
-    id: string,
-    description: string,
-    tool: ToolFn,
-  ): ToolManager {
+  public register(id: string, description: string, tool: ToolFn): ToolManager {
     this.tools.set(id, [description, tool]);
     return this;
   }
