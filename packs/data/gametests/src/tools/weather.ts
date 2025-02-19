@@ -6,21 +6,25 @@ export class SetWeatherFn implements ToolFn {
   static readonly desc: string =
     'Sets the weather in the Minecraft world to the specified weather.';
 
-  required: string[] = ['weather'];
-  properties: {
+  required(): string[] {
+    return ['weather'];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    weather: {
-      type: 'string',
-      description: 'The weather to set in the Minecraft world',
-      enum: ['clear', 'rain', 'thunder'],
-    },
-    duration: {
-      type: 'integer',
-      description:
-        'The duration of the weather (in seconds). If no duration is provided, the duration will be set to a random duration between 300 and 900 seconds.',
-    },
-  };
+  } {
+    return {
+      weather: {
+        type: 'string',
+        description: 'The weather to set in the Minecraft world',
+        enum: ['clear', 'rain', 'thunder'],
+      },
+      duration: {
+        type: 'integer',
+        description:
+          'The duration of the weather (in seconds). If no duration is provided, the duration will be set to a random duration between 300 and 900 seconds.',
+      },
+    };
+  }
 
   handle(params: { [key: string]: any }): Promise<string> {
     const weather_name = params['weather'] as string | undefined;
@@ -71,10 +75,14 @@ export class GetWeatherFn implements ToolFn {
   static readonly id: string = 'get_weather';
   static readonly desc: string = 'Gets the weather in the Minecraft world.';
 
-  required: string[] = [];
-  properties: {
+  required(): string[] {
+    return [];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {};
+  } {
+    return {};
+  }
 
   handle(_params: { [key: string]: any }): Promise<string> {
     const weather = world.getDimension('overworld').getWeather();

@@ -6,59 +6,63 @@ export class SetGameRuleFn implements ToolFn {
   static readonly desc: string =
     'Sets the given gamerules in the Minecraft world to the specified values.';
 
-  required: string[] = [];
-  properties: {
+  required(): string[] {
+    return ['rule', 'value'];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    rule: {
-      type: 'string',
-      description: 'The name of the game rule to set.',
-      enum: [
-        'commandBlockOutput',
-        'commandBlocksEnabled',
-        'doDayLightCycle',
-        'doEntityDrops',
-        'doFireTick',
-        'doImmediateRespawn',
-        'doInsomnia',
-        'doLimitedCrafting',
-        'doMobLoot',
-        'doMobSpawning',
-        'doTileDrops',
-        'doWeatherCycle',
-        'drowningDamage',
-        'fallDamage',
-        'fireDamage',
-        'freezeDamage',
-        'functionCommandLimit',
-        'keepInventory',
-        'maxCommandChainLength',
-        'mobGriefing',
-        'naturalRegeneration',
-        'playersSleepingPercentage',
-        'projectilesCanBreakBlocks',
-        'pvp',
-        'randomTickSpeed',
-        'recipesUnlock',
-        'respawnBlocksExplode',
-        'sendCommandFeedback',
-        'showBorderEffect',
-        'showCoordinates',
-        'showDaysPlayed',
-        'showDeathMessages',
-        'showRecipeMessages',
-        'showTags',
-        'spawnRadius',
-        'tntExplodes',
-        'tntExplosionDropDecay',
-      ],
-    },
-    value: {
-      type: 'string',
-      description:
-        'The value to set the game rule to. Can be a string, integer, or boolean.',
-    },
-  };
+  } {
+    return {
+      rule: {
+        type: 'string',
+        description: 'The name of the game rule to set.',
+        enum: [
+          'commandBlockOutput',
+          'commandBlocksEnabled',
+          'doDayLightCycle',
+          'doEntityDrops',
+          'doFireTick',
+          'doImmediateRespawn',
+          'doInsomnia',
+          'doLimitedCrafting',
+          'doMobLoot',
+          'doMobSpawning',
+          'doTileDrops',
+          'doWeatherCycle',
+          'drowningDamage',
+          'fallDamage',
+          'fireDamage',
+          'freezeDamage',
+          'functionCommandLimit',
+          'keepInventory',
+          'maxCommandChainLength',
+          'mobGriefing',
+          'naturalRegeneration',
+          'playersSleepingPercentage',
+          'projectilesCanBreakBlocks',
+          'pvp',
+          'randomTickSpeed',
+          'recipesUnlock',
+          'respawnBlocksExplode',
+          'sendCommandFeedback',
+          'showBorderEffect',
+          'showCoordinates',
+          'showDaysPlayed',
+          'showDeathMessages',
+          'showRecipeMessages',
+          'showTags',
+          'spawnRadius',
+          'tntExplodes',
+          'tntExplosionDropDecay',
+        ],
+      },
+      value: {
+        type: 'string',
+        description:
+          'The value to set the game rule to. Can be a string, integer, or boolean.',
+      },
+    };
+  }
 
   handle(params: { [key: string]: any }): Promise<string> {
     const rule = params['rule'] as keyof typeof world.gameRules;
@@ -116,54 +120,58 @@ export class GetGameRuleFn implements ToolFn {
   static readonly desc: string =
     'Gets the specified gamerules in the Minecraft world.';
 
-  required: string[] = [];
-  properties: {
+  required(): string[] {
+    return [];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    rule: {
-      type: 'string',
-      description: 'The name of the game rule to retrieve.',
-      enum: [
-        'commandBlockOutput',
-        'commandBlocksEnabled',
-        'doDayLightCycle',
-        'doEntityDrops',
-        'doFireTick',
-        'doImmediateRespawn',
-        'doInsomnia',
-        'doLimitedCrafting',
-        'doMobLoot',
-        'doMobSpawning',
-        'doTileDrops',
-        'doWeatherCycle',
-        'drowningDamage',
-        'fallDamage',
-        'fireDamage',
-        'freezeDamage',
-        'functionCommandLimit',
-        'keepInventory',
-        'maxCommandChainLength',
-        'mobGriefing',
-        'naturalRegeneration',
-        'playersSleepingPercentage',
-        'projectilesCanBreakBlocks',
-        'pvp',
-        'randomTickSpeed',
-        'recipesUnlock',
-        'respawnBlocksExplode',
-        'sendCommandFeedback',
-        'showBorderEffect',
-        'showCoordinates',
-        'showDaysPlayed',
-        'showDeathMessages',
-        'showRecipeMessages',
-        'showTags',
-        'spawnRadius',
-        'tntExplodes',
-        'tntExplosionDropDecay',
-      ],
-    },
-  };
+  } {
+    return {
+      rule: {
+        type: 'string',
+        description: 'The name of the game rule to retrieve.',
+        enum: [
+          'commandBlockOutput',
+          'commandBlocksEnabled',
+          'doDayLightCycle',
+          'doEntityDrops',
+          'doFireTick',
+          'doImmediateRespawn',
+          'doInsomnia',
+          'doLimitedCrafting',
+          'doMobLoot',
+          'doMobSpawning',
+          'doTileDrops',
+          'doWeatherCycle',
+          'drowningDamage',
+          'fallDamage',
+          'fireDamage',
+          'freezeDamage',
+          'functionCommandLimit',
+          'keepInventory',
+          'maxCommandChainLength',
+          'mobGriefing',
+          'naturalRegeneration',
+          'playersSleepingPercentage',
+          'projectilesCanBreakBlocks',
+          'pvp',
+          'randomTickSpeed',
+          'recipesUnlock',
+          'respawnBlocksExplode',
+          'sendCommandFeedback',
+          'showBorderEffect',
+          'showCoordinates',
+          'showDaysPlayed',
+          'showDeathMessages',
+          'showRecipeMessages',
+          'showTags',
+          'spawnRadius',
+          'tntExplodes',
+          'tntExplosionDropDecay',
+        ],
+      },
+    };
+  }
 
   handle(params: { [key: string]: any }): Promise<string> {
     const rule = params['rule'];

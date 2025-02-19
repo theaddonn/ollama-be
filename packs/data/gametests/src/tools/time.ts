@@ -6,16 +6,20 @@ export class SetTimeOfDayFn implements ToolFn {
   static readonly desc: string =
     'Sets the time of day in the Minecraft world to the specified value in ticks.';
 
-  required: string[] = ['time'];
-  properties: {
+  required(): string[] {
+    return ['time'];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    time: {
-      type: 'integer',
-      description:
-        'The time of day in ticks (between 0 and 24000, 0 = 0AM, 12000 = 12PM, 24000 = 24AM )',
-    },
-  };
+  } {
+    return {
+      time: {
+        type: 'integer',
+        description:
+          'The time of day in ticks (between 0 and 24000, 0 = 0AM, 12000 = 12PM, 24000 = 24AM )',
+      },
+    };
+  }
 
   handle(params: { [key: string]: any }): Promise<string> {
     const time = parseInt(params['time'], 10);
@@ -36,10 +40,14 @@ export class GetTimeOfDayFn implements ToolFn {
   static readonly desc: string =
     'Gets the time of day in the Minecraft world in ticks.';
 
-  required: string[] = [];
-  properties: {
+  required(): string[] {
+    return [];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {};
+  } {
+    return {};
+  }
 
   handle(_params: { [key: string]: any }): Promise<string> {
     const time = world.getTimeOfDay();

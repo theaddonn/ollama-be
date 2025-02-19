@@ -1,4 +1,4 @@
-import { Player, world } from '@minecraft/server';
+import { ItemTypes, Player, world } from '@minecraft/server';
 import {
   Ollama,
   Message as OllamaMessage,
@@ -11,11 +11,12 @@ import { ToolManager } from './tool';
 import { GetTimeOfDayFn, SetTimeOfDayFn } from './tools/time';
 import {
   GetGamemodeFn as GetGameModeFn,
-  SetGamemodeDayFn as SetGameModeFn,
+  SetGamemodeFn as SetGameModeFn,
 } from './tools/gamemode';
 import { GetWeatherFn, SetWeatherFn } from './tools/weather';
 import { GetGameRuleFn, SetGameRuleFn } from './tools/gamerules';
 import { GetDifficultyFn, SetDifficultyFn } from './tools/difficulty';
+import { GiveFn } from './tools/give';
 
 type Message = {
   role: string;
@@ -57,7 +58,8 @@ const SystemToolManager: ToolManager = new ToolManager()
   .register(SetGameRuleFn.id, SetGameRuleFn.desc, new SetGameRuleFn())
   .register(GetGameRuleFn.id, GetGameRuleFn.desc, new GetGameRuleFn())
   .register(SetDifficultyFn.id, SetDifficultyFn.desc, new SetDifficultyFn())
-  .register(GetDifficultyFn.id, GetDifficultyFn.desc, new GetDifficultyFn());
+  .register(GetDifficultyFn.id, GetDifficultyFn.desc, new GetDifficultyFn())
+  .register(GiveFn.id, GiveFn.desc, new GiveFn());
 
 const SessionWorldStorageID = 'ollama:storage';
 

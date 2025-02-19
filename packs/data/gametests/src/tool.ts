@@ -1,8 +1,8 @@
 import { Tool } from 'ollama/dist/browser.cjs';
 
 export interface ToolFn {
-  required: string[];
-  properties: {
+  required(): string[];
+  properties(): {
     [key: string]: {
       type: string;
       description: string;
@@ -25,8 +25,8 @@ export class ToolManager {
           description: description,
           parameters: {
             type: 'object',
-            properties: tool.properties,
-            required: tool.required,
+            properties: tool.properties(),
+            required: tool.required(),
           },
         },
       };

@@ -1,30 +1,35 @@
 import { GameMode, world } from '@minecraft/server';
 import { ToolFn } from '../tool';
 
-export class SetGamemodeDayFn implements ToolFn {
+export class SetGamemodeFn implements ToolFn {
   static readonly id: string = 'set_gamemode';
   static readonly desc: string =
     'Sets the gamemode of a given player to the given gamemode.';
 
-  required: string[] = ['player', 'gamemode'];
-  properties: {
+  required(): string[] {
+    return ['player', 'gamemode'];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    player: {
-      type: 'string',
-      description: 'The name of the player',
-    },
-    gamemode: {
-      type: 'string',
-      description: 'The gamemode',
-      enum: [
-        GameMode.survival,
-        GameMode.adventure,
-        GameMode.creative,
-        GameMode.spectator,
-      ],
-    },
-  };
+  } {
+    return {
+      player: {
+        type: 'string',
+        description: 'The name of the player',
+        enum: world.getAllPlayers().map((player) => player.name),
+      },
+      gamemode: {
+        type: 'string',
+        description: 'The gamemode',
+        enum: [
+          GameMode.survival,
+          GameMode.adventure,
+          GameMode.creative,
+          GameMode.spectator,
+        ],
+      },
+    };
+  }
 
   handle(params: { [key: string]: any }): Promise<string> {
     const player_name = params['player'] as string | undefined;
@@ -62,15 +67,20 @@ export class GetGamemodeFn implements ToolFn {
   static readonly id: string = 'get_gamemode';
   static readonly desc: string = 'Gets the gamemode of a given player.';
 
-  required: string[] = ['player'];
-  properties: {
+  required(): string[] {
+    return ['player'];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    player: {
-      type: 'string',
-      description: 'The name of the player',
-    },
-  };
+  } {
+    return {
+      player: {
+        type: 'string',
+        description: 'The name of the player',
+        enum: world.getAllPlayers().map((player) => player.name),
+      },
+    };
+  }
 
   handle(params: { [key: string]: any }): Promise<string> {
     const player_name = params['player'] as string | undefined;

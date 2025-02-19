@@ -6,16 +6,20 @@ export class SetDifficultyFn implements ToolFn {
   static readonly desc: string =
     'Sets the difficulty in the Minecraft world to the specified difficulty.';
 
-  required: string[] = ['difficulty'];
-  properties: {
+  required(): string[] {
+    return ['difficulty'];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    difficulty: {
-      type: 'string',
-      description: 'The difficulty to set in the Minecraft world',
-      enum: ['peaceful', 'easy', 'normal', 'hard'],
-    },
-  };
+  } {
+    return {
+      difficulty: {
+        type: 'string',
+        description: 'The difficulty to set in the Minecraft world',
+        enum: ['peaceful', 'easy', 'normal', 'hard'],
+      },
+    };
+  }
 
   handle(params: { [key: string]: any }): Promise<string> {
     const difficulty_name = params['difficulty'] as string | undefined;
@@ -51,10 +55,14 @@ export class GetDifficultyFn implements ToolFn {
   static readonly id: string = 'get_difficulty';
   static readonly desc: string = 'Gets the difficulty in the Minecraft world.';
 
-  required: string[] = [];
-  properties: {
+  required(): string[] {
+    return [];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {};
+  } {
+    return {};
+  }
 
   handle(_params: { [key: string]: any }): Promise<string> {
     const difficulty = world.getDifficulty();

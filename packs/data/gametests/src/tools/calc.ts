@@ -6,15 +6,19 @@ export class CalcFn implements ToolFn {
   static readonly desc: string =
     'Calculates the result of a mathematical expression.';
 
-  required: string[] = ['expression'];
-  properties: {
+  required(): string[] {
+    return ['expression'];
+  }
+  properties(): {
     [key: string]: { type: string; description: string; enum?: string[] };
-  } = {
-    expression: {
-      type: 'string',
-      description: 'The mathematical expression to evaluate',
-    },
-  };
+  } {
+    return {
+      expression: {
+        type: 'string',
+        description: 'The mathematical expression to evaluate',
+      },
+    };
+  }
 
   private mexp = new Mexp();
 
