@@ -1,6 +1,6 @@
 //import { Logger, Polyfill } from '@bedrock-oss/bedrock-boost';
 import 'core-js/web/url';
-import { Player, system } from '@minecraft/server';
+import { Player, system, world } from '@minecraft/server';
 import { Session } from './session';
 import { MessageFormData } from '@minecraft/server-ui';
 
@@ -16,6 +16,10 @@ system.run(() => {
 
 system.beforeEvents.shutdown.subscribe((_) => {
   system.run(session.save);
+});
+
+world.afterEvents.chatSend.subscribe((event) => {
+  event.sender.runCommand(`scriptevent ollama:chat ${event.message}`);
 });
 
 system.afterEvents.scriptEventReceive.subscribe(async (event) => {
